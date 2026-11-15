@@ -31,9 +31,10 @@ say "2. kagent compiled each Agent into a revision; Ready means the golden snaps
 kagent agent get triage-interactive
 kagent agent get triage-batch
 
-say "3. A Session is a kagent object. Creating one starts a Substrate Actor on the Harness's pool"
+say "3. A Session is a kagent object. Its Actor is created suspended, so it holds no worker yet"
 S_INT="$(new_session triage-interactive)"; SESSIONS+=("$S_INT")
 echo "interactive session: $S_INT"
+echo "-- actors (history: suspended entries stay behind). Occupancy is the workers list."
 kubectl ate get actors -a "$NS"
 
 say "4. One turn. kagent runs the loop; Substrate routed the request to the actor and resumed it"

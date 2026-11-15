@@ -148,9 +148,12 @@ Things to look for, per the docs (not guaranteed timings):
 
 ```bash
 make status
-kubectl ate get actors -a kagent     # actors live in an atespace named after the Agent's namespace
-kubectl ate get workers
+kubectl ate get workers              # current occupancy: bounded by pool size
+kubectl ate get actors -a kagent     # history: every finished Session leaves a suspended actor behind
 ```
+
+Read occupancy from the workers list. The actors list keeps a suspended entry per Session and is not live
+inventory. Actors live in an atespace named after the Agent's namespace.
 
 Parking is observable as `atenet.router.parking.active`, `atenet.router.parking.wait.duration` and
 `atenet.router.parking.rejected` on the router, and as a "Request Parking" card on its `/statusz` page. See
