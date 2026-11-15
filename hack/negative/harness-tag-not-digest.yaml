@@ -1,0 +1,11 @@
+# workload.image must be pinned by sha256 digest. A tag must be rejected.
+apiVersion: api.kagent.dev/v1alpha3
+kind: Harness
+metadata: {name: bad-image-tag, namespace: kagent}
+spec:
+  kagent: {}
+  workload:
+    image: ghcr.io/example/engine:latest
+  substrate:
+    workerPoolRef: {name: interactive}
+    snapshotPolicy: {location: s3://ate-snapshots/kagent/}

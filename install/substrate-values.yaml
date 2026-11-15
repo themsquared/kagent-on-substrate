@@ -1,0 +1,11 @@
+# Extra values for the Agent Substrate chart (substrate 1.0.0).
+#
+# This is the router's request parking budget: how long atenet-router holds a request
+# for a suspended actor while the pool is momentarily full, before it answers 503.
+# 60s is the chart default (substrate chart values.yaml, atenetRouter.requestParking.budget).
+# It is set here only so the knob is visible in the repo. The router binary's own
+# --parked-request-budget default is 5s; the chart overrides it.
+# https://github.com/kagent-dev/substrate/blob/v1.0.0/docs/concepts/request-parking.md
+atenetRouter:
+  requestParking:
+    budget: "60s"

@@ -1,0 +1,32 @@
+# One AgentTemplate: portable behavior. Model, prompt, tools. It says nothing about
+# where it runs. kagent-tool-server is the RemoteMCPServer the kagent chart creates
+# for the bundled kagent-tools server (read-only here, see install/kagent-values.yaml).
+# default-model-config is the ModelConfig `kagent install` creates for your provider.
+#
+# The four tool names exist in kagent-tools 0.3.0 (pkg/k8s/k8s.go). After install,
+# confirm against the server itself:
+#   kubectl -n kagent get remotemcpserver kagent-tool-server -o jsonpath='{.status.discoveredTools[*].name}'
+apiVersion: api.kagent.dev/v1alpha3
+kind: AgentTemplate
+metadata:
+  name: pod-triage
+  namespace: kagent
+spec:
+  description: Read-only Kubernetes triage. Explains why a pod is unhealthy and what to check next.
+  modelConfig:
+    name: default-model-config
+  systemPrompt: |
+    You are a Kubernetes triage assistant. You can only read cluster state.
+    Use the tools to look at pods, events and logs before you answer.
+    Answer in at most five lines: what is wrong, the evidence, and the next command to run.
+    Never suggest a change you have not backed with evidence from a tool call.
+  tools:
+    - mcp:
+        server:
+          kind: RemoteMCPServer
+          name: kagent-tool-server
+        tools:
+          - k8s_get_resources
+          - k8s_describe_resource
+          - k8s_get_events
+          - k8s_get_pod_logs

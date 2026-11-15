@@ -1,0 +1,8 @@
+# CLI config for `kagent install`. The installer takes no Helm flags of its own, so
+# chart values reach it through valuesFiles (resolved against this file's directory).
+# https://kagent.dev/docs/kagent/1.x/setup/installation/#install-with-the-cli
+install:
+  kagent:
+    valuesFiles: [kagent-values.yaml]
+  substrate:
+    valuesFiles: [substrate-values.yaml]

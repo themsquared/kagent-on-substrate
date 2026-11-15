@@ -1,0 +1,6 @@
+.env
+*.log
+hack/.cache/
+hack/crds/
+bin/
+kagent-install/

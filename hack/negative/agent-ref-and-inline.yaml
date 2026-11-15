@@ -1,0 +1,9 @@
+# An Agent sets exactly one of template.ref and template.inline.
+apiVersion: api.kagent.dev/v1alpha3
+kind: Agent
+metadata: {name: bad-both, namespace: kagent}
+spec:
+  template:
+    ref: {name: pod-triage}
+    inline: {description: x}
+  harnessRef: {name: kagent-interactive}

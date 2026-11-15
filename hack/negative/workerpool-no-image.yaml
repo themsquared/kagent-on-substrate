@@ -1,0 +1,7 @@
+# ate.dev WorkerPool requires workerImage.
+apiVersion: ate.dev/v1
+kind: WorkerPool
+metadata: {name: bad-pool, namespace: kagent}
+spec:
+  replicas: 1
+  sandboxClasses: [{name: gvisor}]

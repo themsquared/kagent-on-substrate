@@ -1,0 +1,9 @@
+# substrate.workerPoolRef.name must not be empty.
+apiVersion: api.kagent.dev/v1alpha3
+kind: Harness
+metadata: {name: bad-empty-pool, namespace: kagent}
+spec:
+  kagent: {}
+  substrate:
+    workerPoolRef: {name: ""}
+    snapshotPolicy: {location: s3://ate-snapshots/kagent/}

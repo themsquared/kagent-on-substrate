@@ -1,0 +1,16 @@
+# Optional. `kagent install` already created default-model-config from OPENAI_API_KEY
+# (provider OpenAI, apiKeySecret kagent-openai, key OPENAI_API_KEY). Use this shape to add
+# a second model, then point an AgentTemplate's spec.modelConfig.name at it.
+# https://kagent.dev/docs/kagent/1.x/get-started/your-first-agent/
+apiVersion: api.kagent.dev/v1alpha3
+kind: ModelConfig
+metadata:
+  name: triage-model
+  namespace: kagent
+spec:
+  provider: OpenAI
+  model: gpt-5-mini
+  apiKeySecret: kagent-openai
+  apiKeySecretKey: OPENAI_API_KEY
+  openAI:
+    apiFormat: responses

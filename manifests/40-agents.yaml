@@ -1,0 +1,26 @@
+# Two Agents, one AgentTemplate. Same behavior, different placement: the pairing with
+# a Harness is the only thing that changes. Callers address the Agent
+# (A2A: /agents/{namespace}/{name}), never the pool and never the actor.
+apiVersion: api.kagent.dev/v1alpha3
+kind: Agent
+metadata:
+  name: triage-interactive
+  namespace: kagent
+spec:
+  template:
+    ref:
+      name: pod-triage
+  harnessRef:
+    name: kagent-interactive
+---
+apiVersion: api.kagent.dev/v1alpha3
+kind: Agent
+metadata:
+  name: triage-batch
+  namespace: kagent
+spec:
+  template:
+    ref:
+      name: pod-triage
+  harnessRef:
+    name: kagent-batch

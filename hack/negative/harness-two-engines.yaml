@@ -1,0 +1,10 @@
+# A Harness selects exactly one engine (kagent, codex, claude, byo). Two must be rejected.
+apiVersion: api.kagent.dev/v1alpha3
+kind: Harness
+metadata: {name: bad-two-engines, namespace: kagent}
+spec:
+  kagent: {}
+  codex: {}
+  substrate:
+    workerPoolRef: {name: interactive}
+    snapshotPolicy: {location: s3://ate-snapshots/kagent/}

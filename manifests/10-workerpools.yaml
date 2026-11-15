@@ -1,0 +1,70 @@
+# Two Agent Substrate WorkerPools: two placement domains. Substrate owns what
+# happens inside each one (which worker an actor lands on, resume, suspend, routing).
+# kagent owns which pool an agent is allowed to use (Harness.spec.substrate.workerPoolRef).
+#
+# WORKER_IMAGE is read from the pool that `kagent install` already created, so the
+# worker build always matches the installed Substrate release (see `make apply`).
+#
+# Required by kagent's compiler: every pool that backs a Harness must carry BOTH
+# kagent.dev/worker-pool-name and kagent.dev/worker-pool-namespace. kagent compiles
+# each ActorTemplate with a worker selector on those two labels.
+# Source: kagent docs/architecture/configuration-and-compilation.md (v1.0.1),
+# "WorkerPool sandbox selection".
+apiVersion: ate.dev/v1
+kind: WorkerPool
+metadata:
+  name: interactive
+  namespace: kagent
+  labels:
+    kagent.dev/worker-pool-name: interactive
+    kagent.dev/worker-pool-namespace: kagent
+    tier: interactive
+spec:
+  replicas: 2
+  workerImage: ${WORKER_IMAGE}
+  sandboxClasses:
+    - name: gvisor
+      configRef:
+        name: gvisor-default
+  template:
+    # The chart's own pool runs its workers under a plain ServiceAccount named after
+    # the pool. Reuse it instead of creating another one.
+    serviceAccountName: kagent-default
+    # Worker limits are the capacity envelope that actors share. Substrate places an
+    # actor only where the remaining CPU and memory cover that actor's limits.
+    # kagent sets those limits per actor from config.runtimeDefaults (1 CPU, 1Gi default).
+    resources:
+      requests:
+        cpu: 250m
+        memory: 512Mi
+      limits:
+        cpu: "4"
+        memory: 6Gi
+---
+apiVersion: ate.dev/v1
+kind: WorkerPool
+metadata:
+  name: batch
+  namespace: kagent
+  labels:
+    kagent.dev/worker-pool-name: batch
+    kagent.dev/worker-pool-namespace: kagent
+    tier: batch
+spec:
+  replicas: 1
+  workerImage: ${WORKER_IMAGE}
+  sandboxClasses:
+    - name: gvisor
+      configRef:
+        name: gvisor-default
+  template:
+    serviceAccountName: kagent-default
+    # Deliberately small: room for about two default-sized actors at once, so a burst
+    # of batch work saturates this pool and never touches the interactive one.
+    resources:
+      requests:
+        cpu: 250m
+        memory: 512Mi
+      limits:
+        cpu: "2"
+        memory: 3Gi

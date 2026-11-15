@@ -1,0 +1,32 @@
+# Two Harnesses that select kagent's own agent engine (spec.kagent). They differ in
+# exactly one thing: the WorkerPool. The Harness is where kagent (the runtime) states
+# which compute pool its agents may run on. It does not move actors; Substrate does.
+#
+# spec.workload is omitted, so each runs the release's built-in kagent runtime image
+# (config.harnessImages). Enterprise installs: the 1.x docs show the same shape with
+# workload.image pinned by digest. See README, "Enterprise path".
+apiVersion: api.kagent.dev/v1alpha3
+kind: Harness
+metadata:
+  name: kagent-interactive
+  namespace: kagent
+spec:
+  kagent: {}
+  substrate:
+    workerPoolRef:
+      name: interactive
+    snapshotPolicy:
+      location: s3://ate-snapshots/kagent/
+---
+apiVersion: api.kagent.dev/v1alpha3
+kind: Harness
+metadata:
+  name: kagent-batch
+  namespace: kagent
+spec:
+  kagent: {}
+  substrate:
+    workerPoolRef:
+      name: batch
+    snapshotPolicy:
+      location: s3://ate-snapshots/kagent/

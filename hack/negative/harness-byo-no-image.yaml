@@ -1,0 +1,9 @@
+# BYO harnesses must specify workload.image and workload.command.
+apiVersion: api.kagent.dev/v1alpha3
+kind: Harness
+metadata: {name: bad-byo, namespace: kagent}
+spec:
+  byo: {}
+  substrate:
+    workerPoolRef: {name: interactive}
+    snapshotPolicy: {location: s3://ate-snapshots/kagent/}

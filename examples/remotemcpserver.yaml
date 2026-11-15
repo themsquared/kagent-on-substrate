@@ -1,0 +1,13 @@
+# Optional. Register your own MCP server and list its tools in an AgentTemplate the same way
+# manifests/30-agenttemplate.yaml lists the built-in kagent-tool-server tools. The URL is a
+# placeholder for a Service you run. Same shape as the chart's kagent-tool-server.
+apiVersion: api.kagent.dev/v1alpha3
+kind: RemoteMCPServer
+metadata:
+  name: my-mcp-server
+  namespace: kagent
+spec:
+  description: Example in-cluster MCP server
+  url: http://my-mcp-server.kagent.svc.cluster.local:8080/mcp
+  protocol: STREAMABLE_HTTP
+  timeout: 30s

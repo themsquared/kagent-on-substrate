@@ -1,0 +1,11 @@
+# Extra values for the kagent chart, on top of what `kagent install` sets.
+#
+# Keep the bundled tool server read-only. The demo agents only read cluster state.
+# rbac.readOnly swaps the subchart's cluster-admin ClusterRole for get/list/watch,
+# and --read-only disables the write tools in the server itself.
+# (kagent-tools 0.3.0 values: helm/kagent-tools/values.yaml)
+kagent-tools:
+  rbac:
+    readOnly: true
+  tools:
+    args: ["--read-only"]
